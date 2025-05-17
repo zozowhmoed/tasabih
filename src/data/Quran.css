@@ -1,0 +1,119 @@
+/* src/styles/Quran.css */
+.quran-container {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.surah-selection {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.section-title {
+  color: var(--primary-color);
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.surah-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.surah-card {
+  background: white;
+  border-radius: 10px;
+  padding: 1.2rem;
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  text-align: center;
+}
+
+.surah-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.surah-number {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: var(--accent-color);
+  color: white;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+}
+
+.verses-count {
+  color: #666;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.surah-details {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.surah-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.reward-badge {
+  background: #E8F5E9;
+  color: var(--primary-color);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-weight: bold;
+}
+
+.verses-container {
+  line-height: 2.5;
+  font-size: 1.2rem;
+  text-align: right;
+}
+
+.verse {
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-right: 2rem;
+}
+
+.verse-number {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: var(--accent-color);
+  color: white;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  transform: translateY(-30%);
+}
+
+.surah-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
