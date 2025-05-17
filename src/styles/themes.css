@@ -1,0 +1,25 @@
+:root {
+  /* الثيم الفاتح - درجات خضراء فاتحة */
+  --primary-color: #2E7D32; /* أخضر غامق */
+  --secondary-color: #4CAF50; /* أخضر متوسط */
+  --accent-color: #8BC34A; /* أخضر فاتح */
+  --text-primary: #1B5E20; /* أخضر داكن للنص */
+  --text-secondary: #388E3C; /* أخضر متوسط للنصوص الثانوية */
+  --bg-color: #E8F5E9; /* أخضر فاتح جداً للخلفية */
+  --card-bg: #FFFFFF; /* أبيض للبطاقات */
+  --card-shadow: 0 4px 12px rgba(46, 125, 50, 0.1); /* ظل أخضر خفيف */
+  --border-color: #C8E6C9; /* أخضر فاتح للحدود */
+}
+
+[data-theme="dark"] {
+  /* الثيم الغامق - درجات خضراء غامقة */
+  --primary-color: #81C784; /* أخضر فاتح */
+  --secondary-color: #66BB6A; /* أخضر متوسط */
+  --accent-color: #4CAF50; /* أخضر غامق */
+  --text-primary: #E8F5E9; /* أخضر فاتح جداً للنص */
+  --text-secondary: #A5D6A7; /* أخضر فاتح للنصوص الثانوية */
+  --bg-color: #1B5E20; /* أخضر داكن جداً للخلفية */
+  --card-bg: #2E7D32; /* أخضر غامق للبطاقات */
+  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --border-color: #1B5E20; /* أخضر داكن للحدود */
+}

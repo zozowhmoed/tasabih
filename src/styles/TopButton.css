@@ -1,0 +1,36 @@
+/* زر العودة العلوي الثابت */
+.top-nav-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: #2e7d32; /* اللون الأخضر الأساسي */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 16px;
+}
+
+.top-nav-button:hover {
+  background: #388e3c; /* لون أخضر غامق عند التمرير */
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.top-nav-button:active {
+  transform: translateY(0);
+}
+
+/* أيقونة السهم */
+.top-nav-button span {
+  font-size: 18px;
+}

@@ -1,84 +1,93 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import athkarData from '../data/athkar';
 import '../styles/Athkar.css';
+import '../styles/TopButton.css';
 
 const Athkar = ({ back }) => {
   const [selectedThikr, setSelectedThikr] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [count, setCount] = useState(0);
-  const [completed, setCompleted] = useState(false);
+
+  // التحقق من وجود المحتوى قبل الوصول إليه
+  const currentContent = selectedThikr?.content?.[currentIndex] || {};
 
   const handleCount = () => {
-    const newCount = count + 1;
-    setCount(newCount);
-    
-    if (newCount >= selectedThikr.target) {
-      setCompleted(true);
+    if (count < (currentContent.target || 0)) {
+      setCount(prev => prev + 1);
     }
   };
 
-  const resetSelection = () => {
-    setSelectedThikr(null);
-    setCount(0);
-    setCompleted(false);
+  const nextThikr = () => {
+    if (currentIndex < (selectedThikr?.content?.length || 0) - 1) {
+      setCurrentIndex(currentIndex + 1);
+      setCount(0);
+    } else {
+      setSelectedThikr(null);
+      setCurrentIndex(0);
+      setCount(0);
+    }
   };
+
+  // إعادة تعيين العد عند تغيير الذكر الحالي
+  useEffect(() => {
+    setCount(0);
+  }, [currentIndex]);
 
   return (
     <div className="athkar-container">
+      <button className="top-nav-button" onClick={back}>
+        <span>←</span> القائمة الرئيسية
+      </button>
+
       {!selectedThikr ? (
         <div className="thikr-selection">
           <h2 className="section-title">
-            <span className="icon">📿</span> الأذكار والتسبيح
+            <span role="img" aria-label="Prayer">📿</span> الأذكار والتسبيح
           </h2>
           <div className="thikr-grid">
             {athkarData.map(thikr => (
               <div 
                 key={thikr.id}
                 className="thikr-card"
-                onClick={() => setSelectedThikr(thikr)}
+                onClick={() => {
+                  setSelectedThikr(thikr);
+                  setCurrentIndex(0);
+                  setCount(0);
+                }}
               >
                 <h3>{thikr.name}</h3>
-                <p className="target-count">العدد المطلوب: {thikr.target}</p>
+                <p>{thikr.description}</p>
+                <p>يحتوي على {thikr.content.length} ذكر</p>
               </div>
             ))}
           </div>
-          <button className="back-button" onClick={back}>
-            العودة للقائمة الرئيسية
-          </button>
         </div>
       ) : (
         <div className="thikr-counter">
           <div className="thikr-header">
-            <h2>{selectedThikr.name}</h2>
-            <p className="thikr-text">{selectedThikr.text}</p>
+            <h3>{selectedThikr.name}</h3>
+            <p className="current-thikr">{currentContent.text || 'لا يوجد ذكر متاح'}</p>
+            <p className="thikr-description">
+              {currentContent.description || ''}
+            </p>
           </div>
           
           <div className="counter-display">
-            <div className="count-circle">
-              <span className="current-count">{count}</span>
-              <span className="target-count">/{selectedThikr.target}</span>
-            </div>
+            <p className="count">
+              {count}/{currentContent.target || 0}
+            </p>
           </div>
           
-          <button 
-            className="count-button"
-            onClick={handleCount}
-            disabled={completed}
-          >
-            {completed ? 'مكتمل' : 'اضغط للعد'}
-          </button>
-          
-          {completed && (
-            <div className="congrats-message">
-              <p className="reward-text">🎉 {selectedThikr.reward}</p>
-            </div>
-          )}
-          
           <div className="thikr-actions">
-            <button className="back-button" onClick={resetSelection}>
-              ذكر آخر
+            <button 
+              className={`count-btn ${count >= (currentContent.target || 0) ? 'completed' : ''}`}
+              onClick={handleCount}
+              disabled={count >= (currentContent.target || 0)}
+            >
+              {count >= (currentContent.target || 0) ? 'تمت' : 'اضغط للعد'}
             </button>
-            <button className="back-button" onClick={back}>
-              العودة
+            <button className="next-btn" onClick={nextThikr}>
+              {currentIndex < (selectedThikr.content.length - 1) ? 'الذكر التالي' : 'العودة'}
             </button>
           </div>
         </div>

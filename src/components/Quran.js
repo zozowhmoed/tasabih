@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
 import quranData from '../data/quran';
 import '../styles/Quran.css';
+import '../styles/TopButton.css'; // نستورد ملف التنسيقات الجديد
 
 const Quran = ({ back }) => {
   const [selectedSurah, setSelectedSurah] = useState(null);
 
   return (
     <div className="quran-container">
+      {/* زر العودة الجديد */}
+      <button className="top-nav-button" onClick={back}>
+        <span>←</span> القائمة الرئيسية
+      </button>
+
       {!selectedSurah ? (
         <div className="surah-selection">
           <h2 className="section-title">
-            <span className="icon">📖</span> القرآن الكريم
+            <span role="img" aria-label="Quran">📖</span> القرآن الكريم
           </h2>
           <div className="surah-grid">
             {quranData.map(surah => (
@@ -25,9 +31,6 @@ const Quran = ({ back }) => {
               </div>
             ))}
           </div>
-          <button className="back-button" onClick={back}>
-            العودة للقائمة الرئيسية
-          </button>
         </div>
       ) : (
         <div className="surah-details">
@@ -46,18 +49,6 @@ const Quran = ({ back }) => {
                 {verse}
               </p>
             ))}
-          </div>
-          
-          <div className="surah-actions">
-            <button 
-              className="back-button"
-              onClick={() => setSelectedSurah(null)}
-            >
-              العودة للسور
-            </button>
-            <button className="back-button" onClick={back}>
-              العودة للقائمة
-            </button>
           </div>
         </div>
       )}
