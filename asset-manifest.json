@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/tasabih/static/css/main.fdffb08d.css",
+    "main.js": "/tasabih/static/js/main.a7afa476.js",
+    "static/js/453.3e50262c.chunk.js": "/tasabih/static/js/453.3e50262c.chunk.js",
+    "index.html": "/tasabih/index.html",
+    "main.fdffb08d.css.map": "/tasabih/static/css/main.fdffb08d.css.map",
+    "main.a7afa476.js.map": "/tasabih/static/js/main.a7afa476.js.map",
+    "453.3e50262c.chunk.js.map": "/tasabih/static/js/453.3e50262c.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.fdffb08d.css",
+    "static/js/main.a7afa476.js"
+  ]
+}
