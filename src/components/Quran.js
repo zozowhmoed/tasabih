@@ -1,33 +1,57 @@
 import React, { useState } from 'react';
-import quranData from '../data/quran';
+import { useNavigate } from 'react-router-dom';
+import juzAmmaLast15 from '../data/juzAmmaLast15';
 import '../styles/Quran.css';
-import '../styles/TopButton.css'; // نستورد ملف التنسيقات الجديد
+import '../styles/TopButton.css';
 
 const Quran = ({ back }) => {
   const [selectedSurah, setSelectedSurah] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredSurahs = juzAmmaLast15.filter(surah =>
+    surah.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="quran-container">
-      {/* زر العودة الجديد */}
       <button className="top-nav-button" onClick={back}>
         <span>←</span> القائمة الرئيسية
       </button>
 
       {!selectedSurah ? (
         <div className="surah-selection">
-          <h2 className="section-title">
-            <span role="img" aria-label="Quran">📖</span> القرآن الكريم
-          </h2>
+          <div className="quran-header">
+            <h2 className="section-title">
+              <span className="quran-icon">📖</span> القرآن الكريم
+            </h2>
+            <p className="section-subtitle">جزء عم - السور القصيرة</p>
+            
+            <div className="search-container">
+              <input
+                type="text"
+                placeholder="ابحث عن سورة..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="search-input"
+              />
+            </div>
+          </div>
+
           <div className="surah-grid">
-            {quranData.map(surah => (
+            {filteredSurahs.map(surah => (
               <div 
                 key={surah.id}
                 className="surah-card"
                 onClick={() => setSelectedSurah(surah)}
               >
-                <div className="surah-number">{surah.id}</div>
-                <h3>{surah.name}</h3>
-                <p className="verses-count">{surah.verses} آيات</p>
+                <div className="surah-number">{surah.id - 99}</div>
+                <div className="surah-content">
+                  <h3>{surah.name}</h3>
+                  <p className="verses-count">{surah.verses} آيات</p>
+                </div>
+                <div className="surah-reward">
+                  <span>🔼</span>
+                </div>
               </div>
             ))}
           </div>
@@ -35,11 +59,24 @@ const Quran = ({ back }) => {
       ) : (
         <div className="surah-details">
           <div className="surah-header">
-            <h2>
-              <span className="surah-number">{selectedSurah.id}.</span>
-              {selectedSurah.name}
-            </h2>
-            <p className="reward-badge">الأجر: {selectedSurah.reward}</p>
+            <button 
+              className="back-button"
+              onClick={() => setSelectedSurah(null)}
+            >
+              العودة للسور
+            </button>
+            
+            <div className="surah-title">
+              <h2>
+                <span className="surah-number">{selectedSurah.id - 99}.</span>
+                {selectedSurah.name}
+              </h2>
+              <p className="verses-count">{selectedSurah.verses} آيات</p>
+            </div>
+            
+            <div className="reward-badge">
+              <span>🎁</span> {selectedSurah.reward}
+            </div>
           </div>
           
           <div className="verses-container">

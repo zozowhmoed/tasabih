@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import './App.css';
 import Home from './components/Home';
 import Athkar from './components/Athkar';
+import Quran from './components/Quran';
 
 function App() {
   const [theme, setTheme] = useState('light');
@@ -29,10 +30,17 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/athkar/:categoryId" element={<Athkar />} />
+          <Route path="/quran" element={<QuranWrapper back={() => window.history.back()} />} />
         </Routes>
       </div>
     </Router>
   );
+}
+
+// مكون مساعد للتعامل مع navigation في Quran
+function QuranWrapper({ back }) {
+  const navigate = useNavigate();
+  return <Quran back={() => navigate('/')} />;
 }
 
 export default App;
