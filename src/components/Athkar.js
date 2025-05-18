@@ -1,95 +1,152 @@
 import React, { useState, useEffect } from 'react';
-import athkarData from '../data/athkar';
-import '../styles/Athkar.css';
-import '../styles/TopButton.css';
+import { useParams, useNavigate } from 'react-router-dom';
+import athkarData from '../data/athkarData';
+import './Athkar.css';
 
-const Athkar = ({ back }) => {
-  const [selectedThikr, setSelectedThikr] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
+const Athkar = () => {
+  const { categoryId } = useParams();
+  const navigate = useNavigate();
+  const [currentThikrIndex, setCurrentThikrIndex] = useState(0);
   const [count, setCount] = useState(0);
+  const [showReward, setShowReward] = useState(false);
+  const [completed, setCompleted] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [currentThikr, setCurrentThikr] = useState(null);
 
-  // التحقق من وجود المحتوى قبل الوصول إليه
-  const currentContent = selectedThikr?.content?.[currentIndex] || {};
-
-  const handleCount = () => {
-    if (count < (currentContent.target || 0)) {
-      setCount(prev => prev + 1);
-    }
-  };
-
-  const nextThikr = () => {
-    if (currentIndex < (selectedThikr?.content?.length || 0) - 1) {
-      setCurrentIndex(currentIndex + 1);
-      setCount(0);
-    } else {
-      setSelectedThikr(null);
-      setCurrentIndex(0);
-      setCount(0);
-    }
-  };
-
-  // إعادة تعيين العد عند تغيير الذكر الحالي
   useEffect(() => {
+    const category = athkarData.find(cat => cat.id === parseInt(categoryId));
+    if (category) {
+      setSelectedCategory(category);
+      setCurrentThikr(category.content[0]);
+    }
+  }, [categoryId]);
+
+  const handleIncrement = () => {
+    const newCount = count + 1;
+    setCount(newCount);
+    
+    if (newCount >= currentThikr.target) {
+      setCompleted(true);
+    }
+  };
+
+  const handleReset = () => {
     setCount(0);
-  }, [currentIndex]);
+    setCompleted(false);
+    setShowReward(false);
+  };
+
+  const handleComplete = () => {
+    if (count >= currentThikr.target) {
+      setShowReward(true);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentThikrIndex < selectedCategory.content.length - 1) {
+      const newIndex = currentThikrIndex + 1;
+      setCurrentThikrIndex(newIndex);
+      setCurrentThikr(selectedCategory.content[newIndex]);
+      setCount(0);
+      setCompleted(false);
+      setShowReward(false);
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentThikrIndex > 0) {
+      const newIndex = currentThikrIndex - 1;
+      setCurrentThikrIndex(newIndex);
+      setCurrentThikr(selectedCategory.content[newIndex]);
+      setCount(0);
+      setCompleted(false);
+      setShowReward(false);
+    }
+  };
+
+  const getRandomReward = () => {
+    const rewards = [
+      "غُفرت ذنوبك ورفع الله درجاتك!",
+      "بُني لك بيت في الجنة!",
+      "كتب الله لك 1000 حسنة!",
+      "ستنال شفاعة النبي ﷺ يوم القيامة!",
+      "حُطت عنك خطاياك كما يُحط الورق عن الشجرة!",
+    ];
+    return rewards[Math.floor(Math.random() * rewards.length)];
+  };
+
+  if (!selectedCategory || !currentThikr) {
+    return <div className="loading">جاري التحميل...</div>;
+  }
 
   return (
     <div className="athkar-container">
-      <button className="top-nav-button" onClick={back}>
-        <span>←</span> القائمة الرئيسية
+      <button className="back-button" onClick={() => navigate('/')}>
+        العودة إلى القائمة الرئيسية
       </button>
-
-      {!selectedThikr ? (
-        <div className="thikr-selection">
-          <h2 className="section-title">
-            <span role="img" aria-label="Prayer">📿</span> الأذكار والتسبيح
-          </h2>
-          <div className="thikr-grid">
-            {athkarData.map(thikr => (
-              <div 
-                key={thikr.id}
-                className="thikr-card"
-                onClick={() => {
-                  setSelectedThikr(thikr);
-                  setCurrentIndex(0);
-                  setCount(0);
-                }}
-              >
-                <h3>{thikr.name}</h3>
-                <p>{thikr.description}</p>
-                <p>يحتوي على {thikr.content.length} ذكر</p>
-              </div>
-            ))}
-          </div>
+      
+      <div className="category-header">
+        <h2>{selectedCategory.name}</h2>
+        <p>{selectedCategory.description}</p>
+      </div>
+      
+      <div className="thikr-card">
+        <h3 className="thikr-text">{currentThikr.text}</h3>
+        <p className="thikr-description">{currentThikr.description}</p>
+        
+        <div className="counter">
+          <span className="count">{count}</span>
+          <span> / {currentThikr.target}</span>
         </div>
-      ) : (
-        <div className="thikr-counter">
-          <div className="thikr-header">
-            <h3>{selectedThikr.name}</h3>
-            <p className="current-thikr">{currentContent.text || 'لا يوجد ذكر متاح'}</p>
-            <p className="thikr-description">
-              {currentContent.description || ''}
-            </p>
-          </div>
+        
+        <div className="buttons">
+          <button 
+            className="action-button increment" 
+            onClick={handleIncrement}
+            disabled={completed}
+          >
+            +
+          </button>
           
-          <div className="counter-display">
-            <p className="count">
-              {count}/{currentContent.target || 0}
-            </p>
-          </div>
+          <button 
+            className="action-button reset" 
+            onClick={handleReset}
+          >
+            إعادة
+          </button>
           
-          <div className="thikr-actions">
-            <button 
-              className={`count-btn ${count >= (currentContent.target || 0) ? 'completed' : ''}`}
-              onClick={handleCount}
-              disabled={count >= (currentContent.target || 0)}
-            >
-              {count >= (currentContent.target || 0) ? 'تمت' : 'اضغط للعد'}
-            </button>
-            <button className="next-btn" onClick={nextThikr}>
-              {currentIndex < (selectedThikr.content.length - 1) ? 'الذكر التالي' : 'العودة'}
-            </button>
-          </div>
+          <button 
+            className="action-button complete" 
+            onClick={handleComplete}
+            disabled={!completed}
+          >
+            تمت
+          </button>
+        </div>
+        
+        <div className="navigation">
+          <button onClick={handlePrev} disabled={currentThikrIndex === 0}>
+            السابق
+          </button>
+          <span>{currentThikrIndex + 1} / {selectedCategory.content.length}</span>
+          <button onClick={handleNext} disabled={currentThikrIndex === selectedCategory.content.length - 1}>
+            التالي
+          </button>
+        </div>
+      </div>
+      
+      {showReward && (
+        <div className="reward-notification">
+          <h3>مبارك! لقد أكملت الذكر 🎉</h3>
+          <p className="reward-text"><strong>الفضل:</strong> {currentThikr.reward}</p>
+          <p className="reward-reference"><strong>المرجع:</strong> {currentThikr.reference}</p>
+          <p className="random-reward">✨ <strong>أجرك:</strong> {getRandomReward()}</p>
+          <button 
+            className="close-notification" 
+            onClick={() => setShowReward(false)}
+          >
+            إغلاق
+          </button>
         </div>
       )}
     </div>
