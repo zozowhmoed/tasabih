@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import juzAmmaLast15 from '../data/juzAmmaLast15';
 import '../styles/Quran.css';
 import '../styles/TopButton.css';
