@@ -27,11 +27,15 @@ function App() {
           {theme === 'light' ? '🌙' : '☀️'}
         </button>
         
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/athkar/:categoryId" element={<Athkar />} />
-          <Route path="/quran" element={<QuranWrapper back={() => window.history.back()} />} />
-        </Routes>
+        <main className="main-content">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/athkar/:categoryId" element={<Athkar />} />
+            <Route path="/quran" element={<QuranWrapper back={() => window.history.back()} />} />
+          </Routes>
+        </main>
+
+        <Footer />
       </div>
     </Router>
   );
@@ -41,6 +45,18 @@ function App() {
 function QuranWrapper({ back }) {
   const navigate = useNavigate();
   return <Quran back={() => navigate('/')} />;
+}
+
+// مكون الفوتر الجديد
+function Footer() {
+  return (
+    <footer className="app-footer">
+      <div className="footer-content">
+        <p>تم إنشاء وتطوير هذا المشروع بواسطة محمد أبو طبيخ</p>
+        <p className="copyright">&copy; {new Date().getFullYear()} جميع الحقوق محفوظة</p>
+      </div>
+    </footer>
+  );
 }
 
 export default App;
